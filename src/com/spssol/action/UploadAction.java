@@ -5,18 +5,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.spssol.service.UploadService;
 import com.spssol.util.Common;
 import com.spssol.util.ExcelUtil;
 
@@ -35,7 +32,7 @@ public class UploadAction {
 	public Map<String, Object> uploadFile(HttpServletRequest request,
 			HttpSession session) throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();
-
+System.out.println("123");
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 		Iterator<String> fileNames = multipartRequest.getFileNames();
 		while (fileNames.hasNext()) {
@@ -66,7 +63,6 @@ public class UploadAction {
     	          
     	        System.out.println("=======测试Excel 默认 读取========");  
     	        map.put("data",eu.readExcel());
-    	        System.out.println(map.toString());
 			} else {
 				map.put("status", false);
 				map.put("msg", "文件保存失败");
