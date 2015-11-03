@@ -14,7 +14,6 @@
 	<mvc:annotation-driven />
 	<!-- 映射资源目录 -->
 	<mvc:resources location="/public/" mapping="/public/**" />
-	<mvc:resources location="/music/" mapping="/music/**" />
 	<mvc:resources location="/upload/" mapping="/upload/**" />
 	<!-- 定义视图解析器 -->
 	<bean

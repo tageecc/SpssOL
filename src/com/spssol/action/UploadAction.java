@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,7 +34,6 @@ public class UploadAction {
 	public Map<String, Object> uploadFile(HttpServletRequest request,
 			HttpServletResponse response, HttpSession session) throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();
-		System.out.println("123");
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 		Iterator<String> fileNames = multipartRequest.getFileNames();
 		while (fileNames.hasNext()) {
@@ -60,7 +60,7 @@ public class UploadAction {
 			}
 			if (file != null) {
 				session.setAttribute("path", filePath);
-				response.sendRedirect("data-select.html");
+				response.sendRedirect("/SpssOL/data-select.html");
 			} else {
 				map.put("status", false);
 				map.put("msg", "文件保存失败");
@@ -69,17 +69,47 @@ public class UploadAction {
 		return map;
 	}
 
+	/**
+	 * 
+	 * @Description: 读取文件
+	 * @author big
+	 * @date 2015年11月3日 下午2:21:54
+	 */
 	@RequestMapping(value = "/read/sheet")
 	@ResponseBody
 	public Map<String, Object> readFile(HttpServletRequest request,
 			HttpServletResponse response, HttpSession session) throws Exception {
-		System.out.println("321");
 		Map<String, Object> map = new HashMap<String, Object>();
 		String path = (String) session.getAttribute("path");
 
 		if (path != null && path.length() > 0) {
 			map.put("status", true);
-			map.put("data", ExcelInfo.getSheet(path));
+			map.put("sheet", ExcelInfo.getSheet(path));
+		} else {
+			map.put("status", true);
+			map.put("msg", "请先上传文件！");
+		}
+		return map;
+	}
+
+	/**
+	 * 
+	 * @Description: 读取第N个sheet的值
+	 * @author big
+	 * @date 2015年11月3日 下午2:25:26
+	 * @version V1.0
+	 */
+	@RequestMapping(value = "/read/sheet/{n}")
+	@ResponseBody
+	public Map<String, Object> readSheet(@PathVariable int n,
+			HttpServletRequest request, HttpServletResponse response,
+			HttpSession session) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		String path = (String) session.getAttribute("path");
+
+		if (path != null && path.length() > 0) {
+			map.put("status", true);
+			map.put("data", ExcelInfo.getData(path, n));
 		} else {
 			map.put("status", true);
 			map.put("msg", "请先上传文件！");
