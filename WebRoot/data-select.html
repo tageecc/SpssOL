@@ -17,33 +17,67 @@
         <h1>多元信息挂接系统 - 数据选择</h1>
 
         <h3>MultiInfo - Data Select</h3>
-        <select class="form-control" id="select_sheet">
-        </select>
         <hr/>
+        <div>
+            <ul class="nav nav-tabs"></ul>
+            <div class="tab-content"></div>
+        </div>
     </div>
 </div>
 
 
 <script src="public/js/jquery.js"></script>
+<script src="public/js/lib/bootstrap.min.js"></script>
 <script src="public/js/lib/data-table/jquery.dataTables.min.js"></script>
 <script src="public/js/lib/data-table/dataTables.bootstrap.min.js"></script>
 <script>
     $(document).ready(function () {
 
+        $(document).on("click", "li a", function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+
+            //AJAX - 请求点击的sheet名所对应的表单
+            var sheetNum = $(this).parent().index();
+            $.ajax({
+                url: "file/read/sheet" + sheetNum,
+                type: "get",
+                async: true,
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function (msg) {
+                    console.log(msg);
+                }
+            });
+        });
+
         //AJAX - 请求获得数据文件的每个sheet名称
         $.ajax({
 //            url: "file/read/sheet",
-            url: "js/testJSON/sheet.js",
+            url: "public/js/testJSON/sheet.js",
             type: "get",
             async: true,
             dataType: "json",
             success: function (data) {
                 console.log(data);
+                for (var i = 0; i < data.sheet.length; i++) {
+                    $(".nav-tabs").append("<li role='presentation' data-sheet='sheet_" + i + "'><a href='#sheet_" + i + "'>" + data.sheet[i] + "</a></li>");
+                    $(".tab-content").append("<div role ='tabpanel' class='tab-pane fade in active' id='sheet_" + i + "'></div>");
+                }
+                $(".nav-tabs > li:eq(0)").addClass("active");
             },
             error: function (msg) {
                 console.log(msg);
             }
-        })
+        });
+
+        $("#select_sheet").change(function () {
+            var sheetNum = $("#select_sheet > option:selected").data("sheet");
+            console.log(sheetNum);
+
+        });
 
     });
 </script>
