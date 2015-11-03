@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh-cn">
+    <meta charset="UTF-8">
+    <title>数据选择 - 多元信息挂接系统</title>
+    <link rel="stylesheet" href="public/css/lib/bootstrap.min.css"/>
+    <link rel="stylesheet" href="public/css/lib/data-table/dataTables.bootstrap.min.css"/>
+    <style>
+        .container {
+            margin-top: 100px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-sm-12">
+        <h1>多元信息挂接系统 - 数据选择</h1>
+
+        <h3>MultiInfo - Data Select</h3>
+        <select class="form-control" id="select_sheet">
+        </select>
+        <hr/>
+    </div>
+</div>
+
+
+<script src="public/js/jquery.js"></script>
+<script src="public/js/lib/data-table/jquery.dataTables.min.js"></script>
+<script src="public/js/lib/data-table/dataTables.bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        //AJAX - 请求获得数据文件的每个sheet名称
+        $.ajax({
+            url: "file/read/sheet",
+            //url: "js/testJSON/sheet.js",
+            type: "get",
+            async: true,
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (msg) {
+                console.log(msg);
+            }
+        })
+
+    });
+</script>
+</body>
+</html>
